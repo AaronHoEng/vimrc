@@ -1,0 +1,145 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 加载插件 HeYabin 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if !isdirectory(expand("~/.vim/bundle/vundle/"))		" Check install Plugin 'gmarik/vundle'
+	echo 'Install plugin manager ...'
+	call system("git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle")
+	echo 'Done !'
+endif
+if isdirectory(expand("~/.vim/bundle/vundle/"))		" Check Plugin 'gmarik/vundle'
+	set runtimepath+=~/.vim/bundle/vundle			" rtp,添加Vundle的运行路径至vim环境变量
+	call vundle#begin()								" 要指定安装路径可使用call vundle#begin('~/some/path/here')'')
+	Plugin 'gmarik/vundle'							" 使用Vundle插件来管理vim的插件
+	Plugin 'scrooloose/nerdtree'					" 添加NERDTree树形目录管理插件
+	Plugin 'majutsushi/tagbar'						" 添加Tagbar插件,Taglist的替代品
+	Plugin 'jiangmiao/auto-pairs'					" 自动配对括号
+	Plugin 'godlygeek/tabular'						" 添加格式对齐插件
+	Plugin 'easymotion/vim-easymotion'				" EasyMotion插件
+	Plugin 'ctrlpvim/ctrlp.vim'						" 添加Ctrl-P搜索插件
+	Plugin 'tacahiroy/ctrlp-funky'					" 添加Ctrl-P搜索插件扩展功能,模糊搜索当前文件中所有函数
+	Plugin 'scrooloose/nerdcommenter'				" 代码注释插件,方便批量注释
+	"Plugin 'DoxygenToolkit.vim'						" 快速生成Doxygen格式注释插件
+	Plugin 'mileszs/ack.vim'						" 本项目内搜索单词插件,类似于ack-grep来搜索
+	Plugin 'Valloric/YouCompleteMe'					" YouCompletMe,代码自动补全和静态语法检查(clang_complete、AutoComplPop、Supertab、neocomplcache替代品)
+	"Plugin 'SirVer/ultisnips'						" 代码块引擎
+	"Plugin 'honza/vim-snippets'						" 代码块配置集合,支持多种语言的代码块
+	Plugin 'plasticboy/vim-markdown'				" 添加Markdown插件,依赖于格式对齐插件，确保在其后加载
+	"Plugin 'iamcco/mathjax-support-for-mkdp'		" 添加Markdown数学公式支持
+	"Plugin 'iamcco/markdown-preview.vim'			" 添加Markdown实时预览,需要python支持,并使用浏览器来预览
+	Plugin 'doxygen-support.vim'
+	call vundle#end()								" 所有插件的安装必须在该命令之前
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 配置插件 HeYabin 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if isdirectory(expand("~/.vim/bundle/nerdtree/"))	" for Plugin 'scrooloose/nerdtree'
+	let NERDTreeQuitOnOpen=1						" 打开文件时关闭树
+	let NERDTreeShowBookmarks=1						" 显示书签	
+	let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+	let NERDTreeChDirMode=0
+	let NERDTreeMouseMode=2
+	let NERDTreeShowHidden=1
+	let NERDTreeKeepTreeInNewTab=1
+	let g:nerdtree_tabs_open_on_gui_startup=0
+	nmap <F3> :NERDTreeToggle<CR>				
+endif
+
+if isdirectory(expand("~/.vim/bundle/tagbar/"))		" for Plugin 'majutsushi/tagbar'
+	let g:tagbar_autofocus = 1						" 打开Tagbar时光标自动定位到Tagbar所在窗口
+	" Tagbar开启关闭翻转开关快捷键映射
+	nmap <F9> :TagbarToggle<CR>						 
+endif
+
+if isdirectory(expand("~/.vim/bundle/auto-pairs/"))	" for Plugin 'jiangmiao/auto-pairs'
+	"let g:AutoPairsFlyMode = 0						" 是否开启自动跳转到最近的匹配
+	"let g:AutoPairsShortcutBackInsert = '<M-b>'	" 设置返回跳转前的位置
+	let g:AutoPairsShortcutToggle = '<F10>'			" 设置自动匹配括号插件是否使能翻转快捷键
+endif
+
+if isdirectory(expand("~/.vim/bundle/tabular/"))		" for Plugin 'godlygeek/tabular'
+	" 格式化对齐快捷键,这里不作快捷键映射，需要时手动输入对应的命令即可
+	"nmap <Leader>a= :Tabularize /=<CR>
+	"vmap <Leader>a= :Tabularize /=<CR>
+	"nmap <Leader>a: :Tabularize /:\zs<CR>
+	"vmap <Leader>a: :Tabularize /:\zs<CR>	
+endif
+
+if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))		" for Plugin 'ctrlpvim/ctrlp.vim'
+	let g:ctrlp_map = '<leader>p'
+	let g:ctrlp_cmd = 'CtrlP'
+	map <leader>f :CtrlPMRU<CR>
+	let g:ctrlp_custom_ignore = {
+				\ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+				\ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+				\ }
+	let g:ctrlp_working_path_mode=0
+	let g:ctrlp_match_window_bottom=1
+	let g:ctrlp_max_height=15
+	let g:ctrlp_match_window_reversed=0
+	let g:ctrlp_mruf_max=500
+	let g:ctrlp_follow_symlinks=1
+endif
+
+if isdirectory(expand("~/.vim/bundle/ctrlp-funky/"))		" for Plugin 'tacahiroy/ctrlp-funky'
+	nnoremap <Leader>fu :CtrlPFunky<Cr>
+	nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+	let g:ctrlp_funky_syntax_highlight = 1
+	let g:ctrlp_extensions = ['funky']
+endif
+
+if isdirectory(expand("~/.vim/bundle/nerdcommenter/"))		" for Plugin 'scrooloose/nerdcommenter'
+	" 代码注释插件,这里不作设置，详见 :help NERDCommenter 
+endif
+
+if isdirectory(expand("~/.vim/bundle/ack.vim/"))		" for Plugin 'mileszs/ack.vim'
+	" 本项目内搜索单词插件
+	if executable('ack-grep')
+		let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+	elseif executable('ag')
+		let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
+	endif	
+endif
+
+if isdirectory(expand("~/.vim/bundle/YouCompleteMe/"))		" for Plugin 'Valloric/YouCompleteMe'
+	let g:ycm_use_ultisnips_completer = 1
+	let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'  
+	let g:ycm_autoclose_preview_window_after_insertion = 1	" 离开插入模式后自动关闭预览窗口
+	let g:ycm_confirm_extra_conf=0 " 关闭加载.ycm_extra_conf.py提示
+	let g:ycm_collect_identifiers_from_tags_files=1 " 开启YCM基于(ctags,生成时需设置--fields=+l)标签引擎
+	let g:ycm_cache_omnifunc=0  " 禁止缓存匹配项,每次都重新生成匹配项
+	let g:ycm_seed_identifiers_with_syntax=1    " 语法关键字补全
+	let g:ycm_complete_in_comments = 1	" 在注释输入中也能补全
+	let g:ycm_error_symbol = '>>'	" 设置错误标记
+	let g:ycm_warning_symbol = '>*' " 设置警告标记
+	" YCM快捷键设置
+	inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"    
+	inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+	inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+	inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-n>\<C-p>" : "\<PageDown>"
+	inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+	nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR> 
+	nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+	nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+	nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+	nmap <F5> :YcmDiags<CR>
+endif
+
+if isdirectory(expand("~/.vim/bundle/vim-snippets/")) && isdirectory(expand("~/.vim/bundle/ultisnips/"))		" for Plugin 'SirVer/ultisnips'
+	let g:UltiSnipsSnippetDirectories=['ultisnips']	" 设置snips目录
+	let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'	" snips搜索路径
+	let g:UltiSnipsExpandTrigger = '<c-j>'			" 展开代码块快捷键
+	let g:UltiSnipsJumpForwardTrigger = '<c-p>'		" 前一个候选项快捷键
+	let g:UltiSnipsJumpBackwardTrigger= '<c-n>'		" 后一个候选项快捷键
+	let g:UltiSnipsListSnippets = '<c-l>'			" 使用list展开snips可选项快捷键
+endif
+
+
+let s:Doxy_LocalTemplateFile =	$HOME.'/.vim/bundle/doxygen-support.vim/doxygen-support/templates/doxygen.templates'
+if isdirectory(expand("~/.vim/bundle/DoxygenToolkit.vim/"))		" for Plugin 'DoxygenToolkit.vim'
+	let g:DoxygenToolkit_briefTag_funcName = "yes"
+	let g:DoxygenToolkit_commentType = "C"
+	let g:DoxygenToolkit_authorName="HeYabin, 990194342@qq.com"
+	"let g:DoxygenToolkit_licenseTag="Copyright (C), 2017-".strftime("%Y")." , HeYabin" 
+	let g:doxygen_enhanced_color=1
+endif
